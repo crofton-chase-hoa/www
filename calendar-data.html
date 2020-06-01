@@ -1,0 +1,24 @@
+---
+layout: ~
+title: ~
+permalink: /calendar-data/
+---
+
+[
+{% for event in site.events %}
+	{% assign start_date = event.url | slice: 8, 10 | replace: "/", "-" %}
+	{% assign stop_date = event.stop_date | default: start_date %}
+	{
+		"title": "{{event.title}}",
+		{%- unless event.start_time %}
+		"allDay": true,
+		"start": "{{start_date}}",
+		"end": "{{stop_date}}",
+		{%- else %}
+		"start": "{{start_date}}T{{event.start_time}}:00",
+		"end": "{{stop_date}}T{{event.stop_time}}:00",
+		{%- endunless %}
+		"url": "{{event.url}}"
+	}{%-unless forloop.last %},{%-endunless%}
+{% endfor %}
+]
